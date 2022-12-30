@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import '../models/meal.dart';
 
 class MealDetailScreen extends StatelessWidget {
+  final Function(Meal) onToggleFavorite;
+  final bool Function(Meal) isFavorite;
+
+  const MealDetailScreen(this.onToggleFavorite, this.isFavorite);
+
   Widget _createSectionTitle(BuildContext context, String title) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
@@ -114,15 +119,26 @@ class MealDetailScreen extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.pink,
-        child: Icon(
-          Icons.star_border_purple500_outlined,
-          color: Colors.white,
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 4.0,
+          ),
+          borderRadius: BorderRadius.circular(35),
         ),
-        onPressed: () {
-          Navigator.of(context).pop(meal.title);
-        },
+        child: FloatingActionButton(
+          backgroundColor: Colors.pink,
+          onPressed: () {
+            onToggleFavorite(meal);
+          },
+          child: Icon(
+            isFavorite(meal)
+                ? Icons.star
+                : Icons.star_border_purple500_outlined,
+            color: Colors.white,
+            size: 40,
+          ),
+        ),
       ),
     );
   }
